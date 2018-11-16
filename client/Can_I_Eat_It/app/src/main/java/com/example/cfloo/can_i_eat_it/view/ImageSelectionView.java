@@ -1,9 +1,11 @@
-package com.example.cfloo.can_i_eat_it;
+package com.example.cfloo.can_i_eat_it.view;
 
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.widget.Button;
+
+import com.example.cfloo.can_i_eat_it.R;
 
 import java.util.List;
 

@@ -1,9 +1,10 @@
-package com.example.cfloo.can_i_eat_it;
+package com.example.cfloo.can_i_eat_it.view;
 
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.widget.Button;
 import android.widget.Spinner;
+
+import com.example.cfloo.can_i_eat_it.R;
 
 public class LibrarySelectionView extends AppCompatActivity implements CanIEatItView {
     private String library;

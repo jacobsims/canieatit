@@ -1,12 +1,15 @@
-package com.example.cfloo.can_i_eat_it;
+package com.example.cfloo.can_i_eat_it.view;
 
-import android.graphics.Bitmap;
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.cfloo.can_i_eat_it.R;
+
 public class ResultView extends AppCompatActivity implements CanIEatItView {
+    private Activity activity;
     private ImageView iv;
     private TextView result;
     private Button next;
@@ -14,27 +17,12 @@ public class ResultView extends AppCompatActivity implements CanIEatItView {
     /**
      * Default Constructor for ResultView
      */
-    public ResultView() {
-        setContentView(R.layout.result);
+    public ResultView(Activity activity) {
+        activity.setContentView(R.layout.result);
 
-        iv = (ImageView) findViewById(R.id.rImageView);
-        result = (TextView) findViewById(R.id.rTextView);
-        next = (Button) findViewById(R.id.rNextBTN);
-    }
-
-    /**
-     * Constructor for ResultView that sets the text of the TextView result
-     * to the parameter string r
-     * @param r
-     */
-    public ResultView(String r) {
-        setContentView(R.layout.result);
-
-        iv = (ImageView) findViewById(R.id.rImageView);
-        result = (TextView) findViewById(R.id.rTextView);
-        next = (Button) findViewById(R.id.rNextBTN);
-
-        result.setText(r);
+        iv = (ImageView) activity.findViewById(R.id.rImageView);
+        result = (TextView) activity.findViewById(R.id.rTextView);
+        next = (Button) activity.findViewById(R.id.rNextBTN);
     }
 
     /**
@@ -51,6 +39,10 @@ public class ResultView extends AppCompatActivity implements CanIEatItView {
      */
     public ImageView getImageView(){
         return iv;
+    }
+
+    public TextView getResultView() {
+        return result;
     }
 
     /**

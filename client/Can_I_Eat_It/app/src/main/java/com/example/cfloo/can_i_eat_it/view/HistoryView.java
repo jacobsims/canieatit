@@ -1,8 +1,10 @@
-package com.example.cfloo.can_i_eat_it;
+package com.example.cfloo.can_i_eat_it.view;
 
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.widget.Button;
+
+import com.example.cfloo.can_i_eat_it.R;
 
 public class HistoryView extends AppCompatActivity implements CanIEatItView {
     private Button next;

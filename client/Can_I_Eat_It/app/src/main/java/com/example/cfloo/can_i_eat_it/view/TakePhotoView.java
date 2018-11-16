@@ -1,12 +1,15 @@
-package com.example.cfloo.can_i_eat_it;
+package com.example.cfloo.can_i_eat_it.view;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
-import android.view.SurfaceView;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.example.cfloo.can_i_eat_it.R;
+
 public class TakePhotoView extends AppCompatActivity implements CanIEatItView {
+    private Activity activity;
     private Bitmap photoTaken;
     private Button camera;
     private Button next;
@@ -15,12 +18,13 @@ public class TakePhotoView extends AppCompatActivity implements CanIEatItView {
     /**
      * Constructor for TakePhotoView
      */
-    public TakePhotoView(){
-        setContentView(R.layout.take_picture);
+    public TakePhotoView(Activity activity){
+        this.activity = activity;
+        activity.setContentView(R.layout.take_picture);
 
-        camera = (Button) findViewById(R.id.cameraBTN);
-        next = (Button) findViewById(R.id.tpNextBtn);
-        iv = (ImageView) findViewById(R.id.tpImageView);
+        camera = (Button) activity.findViewById(R.id.cameraBTN);
+        next = (Button) activity.findViewById(R.id.tpNextBtn);
+        iv = (ImageView) activity.findViewById(R.id.tpImageView);
     }
 
     /**
@@ -30,6 +34,7 @@ public class TakePhotoView extends AppCompatActivity implements CanIEatItView {
     public Button getCameraBTN(){
         return camera;
     }
+
 
     /**
      * Getter for next button

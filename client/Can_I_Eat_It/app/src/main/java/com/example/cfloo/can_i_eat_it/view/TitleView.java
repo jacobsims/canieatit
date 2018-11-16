@@ -1,19 +1,26 @@
-package com.example.cfloo.can_i_eat_it;
+package com.example.cfloo.can_i_eat_it.view;
 
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 
-public class TitleView extends AppCompatActivity implements CanIEatItView {
+import com.example.cfloo.can_i_eat_it.R;
+
+public class TitleView implements CanIEatItView {
+    private Activity activity;
     private Button uploadImage;
     private Button takePicture;
     /*
      * Constructor for TitleView
      */
-    public TitleView() {
-        setContentView(R.layout.title_layout);
+    public TitleView(Activity activity) {
+        //setContentView(R.layout.title_layout);
+        this.activity = activity;
 
-        uploadImage = (Button) findViewById(R.id.uploadImage);
-        takePicture = (Button) findViewById(R.id.takePicture);
+        uploadImage = (Button) activity.findViewById(R.id.uploadImage);
+        takePicture = (Button) activity.findViewById(R.id.takePicture);
+
     }
 
     /**
