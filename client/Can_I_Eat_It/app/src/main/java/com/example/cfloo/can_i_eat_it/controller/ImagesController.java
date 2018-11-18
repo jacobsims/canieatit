@@ -67,7 +67,7 @@ public class ImagesController {
         new HistoryRefresh(activity, historyView).execute();
     }
 
-    public void beginTakePhoto() {
+    public void goToTakePhoto() {
         TakePhotoView takePhotoView = new TakePhotoView(activity);
         takePhotoView.getCameraBTN().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +82,10 @@ public class ImagesController {
             }
         });
         currentView = takePhotoView;
+    }
+
+    public void beginTakePhoto() {
+        goToTakePhoto();
         startCameraIntent();
     }
 
@@ -112,6 +116,9 @@ public class ImagesController {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             history.setNewImage(imageBitmap);
+            if (!(currentView instanceof TakePhotoView)) {
+                goToTakePhoto();
+            }
             ((TakePhotoView)currentView).getImageView().setImageBitmap(imageBitmap);
         } else if (requestCode == SELECT_FILE && resultCode == RESULT_OK) {
 
