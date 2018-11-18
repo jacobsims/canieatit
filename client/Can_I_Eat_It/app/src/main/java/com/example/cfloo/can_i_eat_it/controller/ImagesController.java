@@ -7,16 +7,20 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.cfloo.can_i_eat_it.R;
 import com.example.cfloo.can_i_eat_it.model.History;
 import com.example.cfloo.can_i_eat_it.model.UploadedImage;
 import com.example.cfloo.can_i_eat_it.view.CanIEatItView;
+import com.example.cfloo.can_i_eat_it.view.HistoryView;
 import com.example.cfloo.can_i_eat_it.view.ResultView;
 import com.example.cfloo.can_i_eat_it.view.TakePhotoView;
 import com.example.cfloo.can_i_eat_it.view.TitleView;
+import com.koushikdutta.ion.Ion;
 
 import java.io.IOException;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -47,7 +51,20 @@ public class ImagesController {
                 startGalleryIntent();
             }
         });
+        tv.getGoToHistoryBTN().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToHistory();
+            }
+        });
         currentView = tv;
+    }
+
+    public void goToHistory() {
+        HistoryView historyView = new HistoryView(activity);
+        currentView = historyView;
+        Ion.getDefault(activity).getCache().clear();
+        new HistoryRefresh(activity, historyView).execute();
     }
 
     public void beginTakePhoto() {
@@ -86,7 +103,7 @@ public class ImagesController {
 
         rv.getImageView().setImageBitmap(history.getNewImage());
 
-        new ShowResultsFromUpload(history.getNewImage(), rv).execute();
+        new ShowResultsFromUpload(activity, history.getNewImage(), rv).execute();
     }
 
 
@@ -109,18 +126,69 @@ public class ImagesController {
     }
 
     static class ShowResultsFromUpload extends AsyncTask<Void, Void, Void> {
+        Activity activity;
         Bitmap bmp;
         ResultView rv;
 
-        ShowResultsFromUpload(Bitmap bmp, ResultView rv) {
+        ShowResultsFromUpload(Activity activity, Bitmap bmp, ResultView rv) {
+            this.activity = activity;
             this.bmp = bmp;
             this.rv = rv;
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-            UploadedImage img = new SeeFoodApi().detectImage(bmp);
-            rv.getResultView().setText(img.toString());
+            try {
+                final UploadedImage img = new SeeFoodApi().detectImage(bmp);
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        rv.getResultView().setText(img.describeResult());
+                    }
+                });
+            } catch (IOException e) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(activity,
+                                "Failed to determine whether there is food in the image",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+            return null;
+        }
+    }
+
+    static class HistoryRefresh extends AsyncTask<Void, Void, Void> {
+        Activity activity;
+        HistoryView historyView;
+
+        HistoryRefresh(Activity activity, HistoryView hv) {
+            this.activity = activity;
+            historyView = hv;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                final List<UploadedImage> data = new SeeFoodApi().getHistoryList();
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        historyView.updateDataWith(data);
+                    }
+                });
+            } catch (IOException e) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(activity,
+                                "Failed to load history",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
             return null;
         }
     }

@@ -45,3 +45,6 @@ def upload_img_json(upload_image):
             'date': upload_image.get_upload_date(),
             'size': upload_image.get_filesize(),
             'result': upload_image.get_result()}
+
+# Make sure the FoodDetector will be ready when needed
+FoodDetector.getinstance()

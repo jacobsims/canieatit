@@ -11,6 +11,7 @@ public class TitleView implements CanIEatItView {
     private Activity activity;
     private Button uploadImage;
     private Button takePicture;
+    private Button goToHistory;
     /*
      * Constructor for TitleView
      */
@@ -20,6 +21,7 @@ public class TitleView implements CanIEatItView {
 
         uploadImage = (Button) activity.findViewById(R.id.uploadImage);
         takePicture = (Button) activity.findViewById(R.id.takePicture);
+        goToHistory = (Button) activity.findViewById(R.id.historybutton);
 
     }
 
@@ -37,6 +39,10 @@ public class TitleView implements CanIEatItView {
      */
     public Button getTakePictureBTN(){
         return takePicture;
+    }
+
+    public Button getGoToHistoryBTN() {
+        return goToHistory;
     }
 
     @Override

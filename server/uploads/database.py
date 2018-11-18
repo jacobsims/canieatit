@@ -5,6 +5,7 @@ Uses a database file 'canieatit.db' in the current working directory.
 import sqlite3
 import sys
 import io
+import contextlib
 
 def create_schema(db):
     cur = db.cursor()
@@ -29,3 +30,9 @@ def initialize():
         db.commit()
 
     return db
+
+def connect():
+    try:
+        return contextlib.closing(sqlite3.connect('canieatit.db'))
+    except sqlite3.Error as e:
+        print('*************\nSQLITE ERROR: {}\n*************'.format(e))
