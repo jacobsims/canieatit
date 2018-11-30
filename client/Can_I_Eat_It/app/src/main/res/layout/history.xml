@@ -21,7 +21,8 @@
         app:layout_constraintBottom_toTopOf="@+id/hPreviousBTN"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/hTextView"
+        android:background="#348017" />
 
     <TextView
         android:id="@+id/hTextView"
