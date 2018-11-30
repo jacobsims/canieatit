@@ -13,6 +13,7 @@ import com.example.cfloo.can_i_eat_it.R;
 import com.example.cfloo.can_i_eat_it.model.History;
 import com.example.cfloo.can_i_eat_it.model.UploadedImage;
 import com.example.cfloo.can_i_eat_it.view.CanIEatItView;
+import com.example.cfloo.can_i_eat_it.view.GalleryUploadView;
 import com.example.cfloo.can_i_eat_it.view.HistoryView;
 import com.example.cfloo.can_i_eat_it.view.ResultView;
 import com.example.cfloo.can_i_eat_it.view.TakePhotoView;
@@ -20,6 +21,7 @@ import com.example.cfloo.can_i_eat_it.view.TitleView;
 import com.koushikdutta.ion.Ion;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -48,7 +50,7 @@ public class ImagesController {
         tv.getUploadImageBTN().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startGalleryIntent();
+                beginGalleryUpload();
             }
         });
         tv.getGoToHistoryBTN().setOnClickListener(new View.OnClickListener() {
@@ -99,8 +101,38 @@ public class ImagesController {
     }
 
     public void beginTakePhoto() {
+        history.getNewImage().clear();
         goToTakePhoto();
         startCameraIntent();
+    }
+
+    public void goToUploadImage() {
+        GalleryUploadView galleryUploadView = new GalleryUploadView(activity);
+        galleryUploadView.getGalleryBTN().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startGalleryIntent();
+            }
+        });
+        galleryUploadView.getNextBTN().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadAndShowResults();
+            }
+        });
+        galleryUploadView.getPrevious().setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                initialize();
+            }
+        });
+        currentView = galleryUploadView;
+    }
+
+    public void beginGalleryUpload() {
+        history.getNewImage().clear();
+        goToUploadImage();
+        startGalleryIntent();
     }
 
     public void startGalleryIntent() {
@@ -118,8 +150,15 @@ public class ImagesController {
 
     public void uploadAndShowResults() {
         final ResultView rv = new ResultView(activity);
-        
-        rv.getImageView().setImageBitmap(history.getNewImage());
+
+        rv.getNextBTN().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initialize();
+            }
+        });
+        rv.setInitialContents(history.getNewImage());
+        rv.update();
 
         new ShowResultsFromUpload(activity, history.getNewImage(), rv).execute();
     }
@@ -133,13 +172,16 @@ public class ImagesController {
             if (!(currentView instanceof TakePhotoView)) {
                 goToTakePhoto();
             }
-            ((TakePhotoView)currentView).getImageView().setImageBitmap(imageBitmap);
+            ((TakePhotoView)currentView).getMultiselector().updateWithList(history.getNewImage());
         } else if (requestCode == SELECT_FILE && resultCode == RESULT_OK) {
 
             try {
                 Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), data.getData());
                 history.setNewImage(imageBitmap);
-                uploadAndShowResults();
+                if (!(currentView instanceof GalleryUploadView)) {
+                    goToUploadImage();
+                }
+                ((GalleryUploadView)currentView).getMultiselector().updateWithList(history.getNewImage());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -148,23 +190,27 @@ public class ImagesController {
 
     static class ShowResultsFromUpload extends AsyncTask<Void, Void, Void> {
         Activity activity;
-        Bitmap bmp;
+        List<Bitmap> bmps;
         ResultView rv;
 
-        ShowResultsFromUpload(Activity activity, Bitmap bmp, ResultView rv) {
+        ShowResultsFromUpload(Activity activity, List<Bitmap> bmps, ResultView rv) {
             this.activity = activity;
-            this.bmp = bmp;
+            this.bmps = bmps;
             this.rv = rv;
         }
 
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                final UploadedImage img = new SeeFoodApi().detectImage(bmp);
+                final List<UploadedImage> results = new ArrayList<UploadedImage>();
+                for (Bitmap bmp : bmps) {
+                    results.add(new SeeFoodApi().detectImage(bmp));
+                }
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        rv.getResultView().setText(img.describeResult());
+                        rv.setResults(results);
+                        rv.update();
                     }
                 });
             } catch (IOException e) {

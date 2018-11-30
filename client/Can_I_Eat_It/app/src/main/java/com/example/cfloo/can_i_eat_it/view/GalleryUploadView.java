@@ -8,29 +8,26 @@ import android.widget.ImageView;
 
 import com.example.cfloo.can_i_eat_it.R;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class TakePhotoView extends AppCompatActivity implements CanIEatItView {
+public class GalleryUploadView extends AppCompatActivity implements CanIEatItView {
     private Activity activity;
     private Bitmap photoTaken;
     private MultiSelectView multiselector;
-    private Button camera;
+    private Button galleryButton;
     private Button next;
     private ImageView iv;
     private Button previous;
 
     /**
-     * Constructor for TakePhotoView
+     * Constructor for GalleryUploadView
      */
-    public TakePhotoView(Activity activity){
+    public GalleryUploadView(Activity activity){
         this.activity = activity;
-        activity.setContentView(R.layout.take_picture);
+        activity.setContentView(R.layout.gallery_upload);
 
-        camera = (Button) activity.findViewById(R.id.cameraBTN);
+        galleryButton = (Button) activity.findViewById(R.id.galleryBTN);
         next = (Button) activity.findViewById(R.id.tpNextBtn);
 
-        multiselector = (MultiSelectView) activity.findViewById(R.id.takePictureMultiselector);
+        multiselector = (MultiSelectView) activity.findViewById(R.id.galleryMultiselector);
         previous = (Button) activity.findViewById(R.id.Previous);
     }
     public Button getPrevious() {
@@ -40,8 +37,8 @@ public class TakePhotoView extends AppCompatActivity implements CanIEatItView {
      * Getter for camera button
      * @return camera
      */
-    public Button getCameraBTN(){
-        return camera;
+    public Button getGalleryBTN(){
+        return galleryButton;
     }
 
 
@@ -51,6 +48,14 @@ public class TakePhotoView extends AppCompatActivity implements CanIEatItView {
      */
     public Button getNextBTN() {
         return next;
+    }
+
+    /**
+     * Getter for ImageView (Preview Window)
+     * @return iv
+     */
+    public ImageView getImageView(){
+        return iv;
     }
 
     /**
