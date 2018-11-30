@@ -118,7 +118,7 @@ public class ImagesController {
 
     public void uploadAndShowResults() {
         final ResultView rv = new ResultView(activity);
-        
+
         rv.getImageView().setImageBitmap(history.getNewImage());
 
         new ShowResultsFromUpload(activity, history.getNewImage(), rv).execute();
