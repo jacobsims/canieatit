@@ -8,12 +8,16 @@ import android.widget.ImageView;
 
 import com.example.cfloo.can_i_eat_it.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TakePhotoView extends AppCompatActivity implements CanIEatItView {
     private Activity activity;
     private Bitmap photoTaken;
     private Button camera;
     private Button next;
     private ImageView iv;
+    private Button previous;
 
     /**
      * Constructor for TakePhotoView
@@ -24,9 +28,13 @@ public class TakePhotoView extends AppCompatActivity implements CanIEatItView {
 
         camera = (Button) activity.findViewById(R.id.cameraBTN);
         next = (Button) activity.findViewById(R.id.tpNextBtn);
-        iv = (ImageView) activity.findViewById(R.id.tpImageView);
-    }
 
+        iv = (ImageView) activity.findViewById(R.id.tpImageView);
+        previous = (Button) activity.findViewById(R.id.Previous);
+    }
+    public Button getPrevious() {
+        return previous;
+    }
     /**
      * Getter for camera button
      * @return camera

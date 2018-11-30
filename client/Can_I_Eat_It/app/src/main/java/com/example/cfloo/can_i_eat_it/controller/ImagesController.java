@@ -57,6 +57,7 @@ public class ImagesController {
                 goToHistory();
             }
         });
+
         currentView = tv;
     }
 
@@ -65,6 +66,13 @@ public class ImagesController {
         currentView = historyView;
         Ion.getDefault(activity).getCache().clear();
         new HistoryRefresh(activity, historyView).execute();
+        historyView.getPreviousBTN().setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                initialize();
+            }
+        });
     }
 
     public void goToTakePhoto() {
@@ -79,6 +87,12 @@ public class ImagesController {
             @Override
             public void onClick(View v) {
                 uploadAndShowResults();
+            }
+        });
+        takePhotoView.getPrevious().setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+            initialize();
             }
         });
         currentView = takePhotoView;
@@ -104,7 +118,7 @@ public class ImagesController {
 
     public void uploadAndShowResults() {
         final ResultView rv = new ResultView(activity);
-
+        
         rv.getImageView().setImageBitmap(history.getNewImage());
 
         new ShowResultsFromUpload(activity, history.getNewImage(), rv).execute();

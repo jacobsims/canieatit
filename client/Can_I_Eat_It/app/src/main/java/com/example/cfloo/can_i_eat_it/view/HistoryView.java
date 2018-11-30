@@ -18,7 +18,7 @@ import java.util.List;
 
 public class HistoryView extends AppCompatActivity implements CanIEatItView {
     private Activity activity;
-    private Button next;
+
     private Button previous;
     private RecyclerView rv;
     private HistoryDataAdapter adapter;
@@ -30,7 +30,7 @@ public class HistoryView extends AppCompatActivity implements CanIEatItView {
 
         activity.setContentView(R.layout.history);
 
-        next = (Button) activity.findViewById(R.id.hNextBTN);
+
         previous = (Button) activity.findViewById(R.id.hPreviousBTN);
         rv = (RecyclerView) activity.findViewById(R.id.hRecyclerView);
 
@@ -44,9 +44,7 @@ public class HistoryView extends AppCompatActivity implements CanIEatItView {
         adapter.setData(data);
     }
 
-    public Button getNextBTN(){
-        return next;
-    }
+
 
     public Button getPreviousBTN(){
         return previous;

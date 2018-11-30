@@ -23,6 +23,7 @@ public class ResultView extends AppCompatActivity implements CanIEatItView {
         iv = (ImageView) activity.findViewById(R.id.rImageView);
         result = (TextView) activity.findViewById(R.id.rTextView);
         next = (Button) activity.findViewById(R.id.rNextBTN);
+
     }
 
     /**
