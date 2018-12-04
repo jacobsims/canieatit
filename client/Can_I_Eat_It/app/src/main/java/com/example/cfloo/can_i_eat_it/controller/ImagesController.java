@@ -77,7 +77,6 @@ public class ImagesController {
     public void goToHistory() {
         HistoryView historyView = new HistoryView(activity);
         currentView = historyView;
-        Ion.getDefault(activity).getCache().clear();
         new HistoryRefresh(activity, historyView).execute();
         historyView.getPreviousBTN().setOnClickListener(new View.OnClickListener(){
 
@@ -188,6 +187,7 @@ public class ImagesController {
     public void uploadAndShowResults() {
         if (history.getNewImage().size() == 0) {
             Toast.makeText(activity, "Please add an image", Toast.LENGTH_LONG).show();
+            return;
         }
         final ResultView rv = new ResultView(activity);
 
