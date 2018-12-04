@@ -37,6 +37,12 @@ public class ImagesController {
         this.activity = activity;
     }
 
+    /**
+     * This method initializes the program and starts the main screen where
+     * you take a picture or add pictures.
+     * There are also listeners for the buttons for taking a photo, look at
+     * gallery, and upload image.
+     */
     public void initialize() {
         activity.setContentView(R.layout.title_layout);
         TitleView tv = new TitleView(activity);
@@ -63,6 +69,11 @@ public class ImagesController {
         currentView = tv;
     }
 
+    /**
+     * This method goes makes a new view history if the gallery button has been selected.
+     * This displays the history view and also has the listener to go back to
+     * main view if back is selected
+     */
     public void goToHistory() {
         HistoryView historyView = new HistoryView(activity);
         currentView = historyView;
@@ -77,6 +88,10 @@ public class ImagesController {
         });
     }
 
+    /**
+     * This is called from the beginTakePhoto method. This method opens up the camera and
+     * allows for the taking of a picture. This also lets you upload to the server.
+     */
     public void goToTakePhoto() {
         TakePhotoView takePhotoView = new TakePhotoView(activity);
         takePhotoView.getCameraBTN().setOnClickListener(new View.OnClickListener() {
@@ -100,12 +115,20 @@ public class ImagesController {
         currentView = takePhotoView;
     }
 
+    /**
+     * This is called when you select take a photo. It starts the method
+     * that controls the view and starts the camera. It also gets history able to
+     * take a new image in
+     */
     public void beginTakePhoto() {
         history.getNewImage().clear();
         goToTakePhoto();
         startCameraIntent();
     }
 
+    /**
+     * This method controls the view for the gallery view.
+     */
     public void goToUploadImage() {
         GalleryUploadView galleryUploadView = new GalleryUploadView(activity);
         galleryUploadView.getGalleryBTN().setOnClickListener(new View.OnClickListener() {
@@ -129,18 +152,28 @@ public class ImagesController {
         currentView = galleryUploadView;
     }
 
+    /**
+     * This method gets history ready for a new image. It also starts the gallery and
+     * They also call the method that controls the view
+     */
     public void beginGalleryUpload() {
         history.getNewImage().clear();
         goToUploadImage();
         startGalleryIntent();
     }
 
+    /**
+     *  This lets you pick images from the gallery and opens up the window
+     */
     public void startGalleryIntent() {
         Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
         galleryIntent.setType("image/*");
         activity.startActivityForResult(Intent.createChooser(galleryIntent, "Select File"), SELECT_FILE);
     }
 
+    /**
+     * This lets you take images from your phones camera and opens the camera
+     */
     public void startCameraIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
@@ -148,6 +181,10 @@ public class ImagesController {
         }
     }
 
+    /**
+     *  This uploads the photo to the server and shows the results.
+     *  This includes multiple images
+     */
     public void uploadAndShowResults() {
         if (history.getNewImage().size() == 0) {
             Toast.makeText(activity, "Please add an image", Toast.LENGTH_LONG).show();
@@ -166,7 +203,12 @@ public class ImagesController {
         new ShowResultsFromUpload(activity, history.getNewImage(), rv).execute();
     }
 
-
+    /**
+     *  Shows multiple results to the user
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
@@ -191,6 +233,9 @@ public class ImagesController {
         }
     }
 
+    /**
+     *  Shows results to the user from upload
+     */
     static class ShowResultsFromUpload extends AsyncTask<Void, Void, Void> {
         Activity activity;
         List<Bitmap> bmps;
@@ -230,6 +275,9 @@ public class ImagesController {
         }
     }
 
+    /**
+     * This updates the history when new pictures have been taken
+     */
     static class HistoryRefresh extends AsyncTask<Void, Void, Void> {
         Activity activity;
         HistoryView historyView;
