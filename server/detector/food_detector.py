@@ -7,6 +7,7 @@ import argparse
 import numpy as np
 import tensorflow as tf
 import uploads
+import math
 import scipy.stats
 from PIL import Image
 from threading import Lock
@@ -18,10 +19,9 @@ class FoodDetector():
 
     # Returns a float from 0 to 1. Value less than 0.5 = not food.
     def score_convert(self, scores):
-        untransformed = float(scores[0][0]) - float(scores[0][1])
-        # Standard deviation found experimentally using test_seefood.py
-        zscore = untransformed / 2.8
-        return scipy.stats.norm.cdf(zscore)
+        difference = float(scores[0][0]) - float(scores[0][1])
+        result = 1.0 / (1 + math.exp(-difference))
+        return result
 
 
     def __init__(self):

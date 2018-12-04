@@ -149,6 +149,9 @@ public class ImagesController {
     }
 
     public void uploadAndShowResults() {
+        if (history.getNewImage().size() == 0) {
+            Toast.makeText(activity, "Please add an image", Toast.LENGTH_LONG).show();
+        }
         final ResultView rv = new ResultView(activity);
 
         rv.getNextBTN().setOnClickListener(new View.OnClickListener() {
